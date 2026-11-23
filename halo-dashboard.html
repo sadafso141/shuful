@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Barako Business Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg1:#f7f1e3;--bg2:#efe5cf;--o1:#e6c77f;--o2:#b9d8c8;--glass:rgba(255,255,255,.62);--g2:rgba(255,255,255,.92);--stroke:rgba(160,122,42,.25);--text:#1c1710;--muted:#7a6b50;--blue:#9a7424;--glow:rgba(160,122,42,.35);--onacc:#fff;--ok:#1f9e74;--warn:#c47a1a;--bad:#c93a52;--sh:0 10px 40px rgba(120,90,30,.15);--side:rgba(255,252,244,.8);
+color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg1:#080706;--bg2:#13100b;--o1:#7a5a22;--o2:#14503c;--glass:rgba(255,246,225,.05);--g2:rgba(255,246,225,.1);--stroke:rgba(226,196,130,.16);--text:#f6f0e2;--muted:#a99d86;--blue:#d9b46a;--glow:rgba(217,180,106,.5);--onacc:#1a1408;--ok:#3ecf9a;--warn:#f0a35e;--bad:#e0566b;--sh:0 10px 40px rgba(0,0,0,.55);--side:rgba(10,9,7,.85);color-scheme:dark}}
+:root[data-theme="dark"]{--bg1:#080706;--bg2:#13100b;--o1:#7a5a22;--o2:#14503c;--glass:rgba(255,246,225,.05);--g2:rgba(255,246,225,.1);--stroke:rgba(226,196,130,.16);--text:#f6f0e2;--muted:#a99d86;--blue:#d9b46a;--glow:rgba(217,180,106,.5);--onacc:#1a1408;--ok:#3ecf9a;--warn:#f0a35e;--bad:#e0566b;--sh:0 10px 40px rgba(0,0,0,.55);--side:rgba(10,9,7,.85);color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box;margin:0}
+body{font-family:Poppins,system-ui,sans-serif;color:var(--text);min-height:100vh;background:linear-gradient(160deg,var(--bg1),var(--bg2));overflow-x:hidden;font-size:14px}
+button,input,select{font:inherit;color:inherit}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.4;z-index:0;pointer-events:none;animation:dr 18s ease-in-out infinite alternate}
+.orb.a{width:420px;height:420px;background:var(--o1);top:-120px;left:120px}.orb.b{width:340px;height:340px;background:var(--o2);bottom:-100px;right:-60px;animation-delay:-9s}
+@keyframes dr{to{transform:translate(60px,40px) scale(1.15)}}
+.glass{background:var(--glass);border:1px solid var(--stroke);border-radius:20px;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);box-shadow:var(--sh);position:relative;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s,border-color .35s}
+.hov:hover{transform:translateY(-4px);border-color:var(--blue);box-shadow:var(--sh),0 0 30px var(--glow)}
+.app{--sw:272px;position:relative;z-index:1;display:grid;grid-template-columns:var(--sw) 1fr;gap:18px;padding:18px;max-width:1600px;margin:auto;transition:grid-template-columns .45s cubic-bezier(.3,.9,.3,1)}
+.app.collapsed{--sw:84px}
+aside{position:sticky;top:18px;height:calc(100vh - 36px);display:flex;flex-direction:column;background:var(--side);overflow:hidden;z-index:30}
+.brand{display:flex;align-items:center;gap:10px;padding:16px 14px 8px;cursor:pointer}
+.bag{flex:none;width:44px;height:44px;filter:drop-shadow(0 0 12px rgba(120,220,60,.45))}
+.bt b{display:block;font-weight:600;letter-spacing:.04em;font-size:1.05rem;line-height:1}.bt small{font-size:.62rem;color:var(--muted);letter-spacing:.14em}
+.col{margin-left:auto;width:34px;height:34px;border-radius:10px;border:0;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center;transition:.3s}
+.col:hover{color:var(--blue);background:var(--glass)}.collapsed .col svg{transform:rotate(180deg)}
+.portal{padding:2px 16px 12px;font-weight:500;font-size:1rem;white-space:nowrap}
+.menu{flex:1;overflow:auto;padding:4px 10px;scrollbar-width:thin}
+.gh,.si,.lo{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;color:var(--text);padding:11px 12px;border-radius:13px;cursor:pointer;text-decoration:none;position:relative;transition:background .3s,box-shadow .3s,color .3s;white-space:nowrap}
+.gh:hover,.si:hover,.lo:hover{background:var(--g2)}
+.gh span,.si span{flex:1;text-align:left}
+.si{padding:9px 12px 9px 22px;color:var(--muted);font-size:.9rem}
+.si.on,.gh.on{background:var(--g2);color:var(--blue);box-shadow:0 0 22px var(--glow),inset 2px 0 0 var(--blue)}
+.ic{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chev{width:16px;height:16px;transition:transform .35s}.grp.open .chev{transform:rotate(180deg)}
+.sub{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s cubic-bezier(.3,.9,.3,1)}.sub>div{overflow:hidden}.grp.open .sub{grid-template-rows:1fr}
+.foot{padding:8px 10px 12px;border-top:1px solid var(--stroke)}.lo:hover{color:var(--bad)}
+.collapsed .bt,.collapsed .portal,.collapsed .gh span,.collapsed .gh .chev,.collapsed .sub,.collapsed .si span,.collapsed .lo span{display:none}
+.collapsed .brand{flex-direction:column;padding-bottom:4px}.collapsed .col{margin:0}.collapsed .gh,.collapsed .lo{justify-content:center}
+main{display:flex;flex-direction:column;gap:18px;min-width:0}
+.top{display:flex;align-items:center;gap:12px;padding:14px 20px;position:relative;z-index:5}
+.top h1{font-size:1.3rem;font-weight:600;letter-spacing:-.01em}.crumb{font-size:.78rem;color:var(--muted)}
+.grow{flex:1}
+.ib{position:relative;width:42px;height:42px;border-radius:13px;border:1px solid var(--stroke);background:var(--glass);cursor:pointer;display:grid;place-items:center;transition:.3s}
+.ib:hover{border-color:var(--blue);box-shadow:0 0 18px var(--glow);color:var(--blue)}
+#burger{display:none}
+.badge{position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;border-radius:10px;background:var(--bad);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;padding:0 5px}.badge.bump{animation:bp .4s}@keyframes bp{50%{transform:scale(1.5)}}
+#view{display:flex;flex-direction:column;gap:18px;animation:fi .45s}@keyframes fi{from{opacity:0;transform:translateY(10px)}}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px}.kpi{padding:18px 20px}.kpi .l{color:var(--muted);font-size:.82rem}
+.num{font-size:1.9rem;font-weight:600;letter-spacing:-.03em;margin:8px 0 4px}.dl{font-size:.8rem;font-weight:500}.up{color:var(--ok)}.dn{color:var(--bad)}
+.skel{height:2rem;width:55%;border-radius:10px;margin:10px 0 6px;background:linear-gradient(90deg,var(--glass),var(--g2),var(--glass));background-size:200% 100%;animation:sh 1.2s infinite}@keyframes sh{to{background-position:-200% 0}}
+.row{display:grid;grid-template-columns:2fr 1fr;gap:18px}.card{padding:20px}.card h2{font-size:1rem;font-weight:600}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.seg{display:flex;background:var(--glass);border:1px solid var(--stroke);border-radius:12px;padding:3px}.seg button{border:0;background:none;color:var(--muted);padding:5px 12px;border-radius:9px;cursor:pointer;transition:.3s}.seg .on{background:var(--blue);color:var(--onacc);box-shadow:0 0 16px var(--glow)}
+#chart{width:100%;height:280px;display:block;touch-action:none;transition:opacity .3s}
+.tip{position:absolute;pointer-events:none;padding:8px 12px;border-radius:12px;font-size:.8rem;background:var(--g2);border:1px solid var(--blue);backdrop-filter:blur(14px);opacity:0;transition:opacity .2s;white-space:nowrap;box-shadow:0 0 20px var(--glow)}
+.att{display:flex;align-items:center;gap:12px;padding:11px;border-radius:14px;cursor:pointer;transition:.3s;width:100%;border:0;background:none;text-align:left}.att:hover{background:var(--g2);transform:translateX(4px)}
+.att small{color:var(--muted);display:block}.dot{width:10px;height:10px;border-radius:50%;flex:none;background:currentColor;box-shadow:0 0 12px currentColor}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.info{color:var(--blue)}.att b,.toast h3{color:var(--text);font-weight:500}
+.tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.search{flex:1;min-width:180px;display:flex;align-items:center;gap:10px;padding:0 14px;height:42px;border-radius:13px;background:var(--glass);border:1px solid var(--stroke);transition:.3s}.search:focus-within{border-color:var(--blue);box-shadow:0 0 18px var(--glow)}
+.search input{flex:1;border:0;background:none;outline:0;min-width:0}
+.btn{border:1px solid var(--blue);background:var(--blue);color:var(--onacc);font-weight:500;padding:10px 18px;border-radius:12px;cursor:pointer;box-shadow:0 0 20px var(--glow);transition:.3s}.btn:hover{transform:translateY(-2px);box-shadow:0 0 32px var(--glow)}.btn:disabled{opacity:.6;transform:none}
+.btn.ghost{background:none;color:var(--blue);box-shadow:none}.btn.danger{color:#fff;background:var(--bad);border-color:var(--bad);box-shadow:0 0 20px rgba(240,62,94,.4)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:620px}
+th{text-align:left;color:var(--muted);font-weight:500;font-size:.8rem;padding:10px 14px}td{padding:12px 14px;border-top:1px solid var(--stroke)}td.pri{font-weight:500}
+tbody tr{transition:background .25s}tbody tr:hover{background:var(--g2)}tr.rm{animation:rm .4s forwards}@keyframes rm{to{opacity:0;transform:translateX(30px)}}tr.nw{animation:fi .5s}
+.chip{display:inline-block;padding:3px 11px;border-radius:20px;font-size:.78rem;font-weight:500;background:color-mix(in srgb,currentColor 16%,transparent)}
+.ra{text-align:right;white-space:nowrap}.mini{border:1px solid var(--stroke);background:var(--glass);border-radius:9px;padding:5px 11px;margin-left:6px;cursor:pointer;font-size:.8rem;transition:.25s}
+.mini:hover{border-color:var(--blue);color:var(--blue);box-shadow:0 0 14px var(--glow)}.mini.pb{background:var(--blue);color:var(--onacc);border-color:var(--blue)}.mini.pb:hover{color:var(--onacc)}.mini.dng:hover{border-color:var(--bad);color:var(--bad);box-shadow:0 0 14px rgba(240,62,94,.4)}
+.empty{text-align:center;color:var(--muted);padding:36px!important}.cnt{color:var(--muted);font-size:.8rem;padding:12px 14px 0}
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(5,10,30,.45);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;animation:fi .25s}
+.modal{width:min(440px,100%);padding:24px;background:var(--g2);animation:pop .4s cubic-bezier(.2,1.2,.4,1)}@keyframes pop{from{opacity:0;transform:scale(.9)}}
+.modal h2{margin-bottom:6px;font-size:1.15rem}.modal p{color:var(--muted);margin-bottom:6px}.fields{display:grid;gap:12px;margin:14px 0}
+label{display:grid;gap:5px;font-size:.8rem;color:var(--muted)}label input,label select{height:42px;border-radius:12px;border:1px solid var(--stroke);background:var(--glass);padding:0 12px;outline:0;color:var(--text);transition:.3s}
+label input:focus,label select:focus{border-color:var(--blue);box-shadow:0 0 16px var(--glow)}label select option{color:#111}label.err input{border-color:var(--bad)}
+.mf{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+#toasts{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);right:14px;z-index:80;display:flex;flex-direction:column;gap:10px;width:min(360px,calc(100vw - 28px))}
+.toast{padding:14px 16px 18px;display:flex;gap:12px;overflow:hidden;animation:ti .5s cubic-bezier(.2,1.2,.4,1);background:var(--g2)}.toast.out{animation:to .3s forwards}
+@keyframes ti{from{opacity:0;transform:translateX(60px) scale(.9)}}@keyframes to{to{opacity:0;transform:translateX(60px)}}
+.toast .dot{margin-top:6px}.toast p{font-size:.82rem;color:var(--muted);margin-top:2px}.toast .x{margin-left:auto;border:0;background:none;color:var(--muted);cursor:pointer;align-self:flex-start}
+.toast .go{margin-top:8px;padding:4px 12px;border-radius:9px;border:1px solid currentColor;background:none;cursor:pointer;font-size:.8rem;color:var(--blue)}
+.bar{position:absolute;left:0;bottom:0;height:3px;background:currentColor;box-shadow:0 0 10px currentColor;animation:ba linear forwards}@keyframes ba{from{width:100%}to{width:0}}
+#panel{position:fixed;top:0;right:0;height:100%;width:min(380px,100%);z-index:70;padding:calc(env(safe-area-inset-top,0px) + 18px) 16px 16px;transform:translateX(105%);transition:transform .5s cubic-bezier(.2,.9,.2,1);border-radius:24px 0 0 24px;overflow:auto;background:var(--g2)}#panel.open{transform:none}
+.so{position:fixed;inset:0;z-index:90;display:none;place-items:center;text-align:center;background:var(--bg1);padding:20px}.so.show{display:grid}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+@media (max-width:900px){.app{grid-template-columns:1fr;padding:12px}.app.collapsed{--sw:272px}#burger{display:grid}.col{display:none}.row{grid-template-columns:1fr}
+aside{position:fixed;left:12px;top:12px;bottom:12px;height:auto;width:272px;transform:translateX(-120%);transition:transform .45s cubic-bezier(.2,.9,.2,1);z-index:50}.app.mo aside{transform:none}
+.app.mo::after{content:"";position:fixed;inset:0;background:rgba(5,10,30,.45);z-index:40}.collapsed .bt,.collapsed .portal,.collapsed .gh span,.collapsed .si span,.collapsed .lo span{display:revert}.collapsed .sub{display:grid}}
+h1,.num,.modal h2,.card h2{font-family:'Playfair Display',Georgia,serif;font-weight:600}
+.today{font-size:.82rem;color:var(--muted);text-align:right}.dl.info{color:var(--blue)}
+.tools select{height:42px;border-radius:13px;border:1px solid var(--stroke);background:var(--glass);padding:0 12px;outline:0;color:var(--text)}.tools select option{color:#111}
+.tools label.dt{display:flex;align-items:center;gap:8px;white-space:nowrap}.tools label.dt input{color-scheme:inherit}
+.pg{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:14px}.cnt{color:var(--muted);font-size:.8rem}.pgb{display:flex;gap:6px}
+.pgb button{min-width:36px;height:36px;border-radius:10px;border:1px solid var(--stroke);background:var(--glass);cursor:pointer;transition:.25s}.pgb button:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.pgb .on{background:var(--blue);color:var(--onacc);border-color:var(--blue);box-shadow:0 0 16px var(--glow)}.pgb button:disabled{opacity:.35;cursor:default}
+.sortb{border:0;background:none;color:var(--muted);font-weight:500;font-size:.8rem;cursor:pointer;padding:0}.sortb:hover{color:var(--blue)}.dtc{white-space:nowrap;color:var(--muted)}
+.lg{display:flex;gap:16px;font-size:.8rem;color:var(--muted);margin-bottom:6px}.lg span{display:flex;align-items:center;gap:6px}
+@media (max-width:700px){.today{display:none}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="orb a"></div><div class="orb b"></div>
+<div id="toasts" aria-live="polite"></div>
+<aside id="panel" class="glass"><div class="head"><h2>Notifications</h2><span><button class="btn ghost" id="clr">Clear all</button> <button class="ib" id="cp" aria-label="Close" style="display:inline-grid">✕</button></span></div><div id="nl"></div></aside>
+<div class="so" id="so"><div><h1 style="font-size:1.6rem">You’ve been signed out</h1><p style="color:var(--muted);margin:8px 0 22px">Your session on Barako Business Portal has ended.</p><button class="btn" id="si">Sign in again</button></div></div>
+
+<div class="app" id="app">
+<aside class="glass" aria-label="Main navigation">
+  <div class="brand" id="brand"><svg class="bag" viewBox="0 0 48 48"><path d="M10 15h28l-2 28H12z" fill="#7ed321"/><path d="M17 15a7 7 0 0 1 14 0" fill="none" stroke="#5aa812" stroke-width="3"/><text x="24" y="33" text-anchor="middle" font-size="8" font-weight="700" fill="#fff" font-family="Poppins,sans-serif">BARAKO</text></svg>
+    <div class="bt"><b>BARAKO</b><small>HYPERMARKET</small></div>
+    <button class="col" id="col" aria-label="Collapse sidebar"><svg class="ic" viewBox="0 0 24 24"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg></button></div>
+  <div class="portal">Business Portal</div>
+  <div class="menu" id="menu"></div>
+  <div class="foot"><button class="lo" id="lo"><svg class="ic" viewBox="0 0 24 24"><path d="M9 21H5V3h4M16 17l5-5-5-5M21 12H9"/></svg><span>Logout</span></button></div>
+</aside>
+<main>
+  <header class="top glass">
+    <button class="ib" id="burger" aria-label="Open menu"><svg class="ic" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <div><div class="crumb" id="crumb"></div><h1 id="title"></h1></div><div class="grow"></div><div class="today" id="today"></div>
+    <button class="ib" id="theme" aria-label="Toggle theme"><svg class="ic" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <button class="ib" id="bell" aria-label="Notifications"><svg class="ic" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 21h4"/></svg><span class="badge" id="badge" hidden>0</span></button>
+  </header>
+  <div id="view"></div>
+</main>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),rnd=(a,b)=>Math.random()*(b-a)+a,fmt=n=>n.toLocaleString('en-US');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* Simulated AJAX round-trip (latency + rare failure). Swap for fetch() to your real API. */
+const wait=(v,ms=rnd(350,800))=>new Promise((ok,no)=>setTimeout(()=>Math.random()<.03?no(new Error('Request timed out')):ok(v),ms));
+const IC={home:'<path d="M3 11l9-8 9 8M5 10v10h14V10"/>',check:'<circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',receipt:'<path d="M5 3h14v18l-3-2-2 2-2-2-2 2-2-2-3 2z"/><path d="M9 8h6M9 12h6"/>',mega:'<path d="M3 11v3l12 5V6z"/><path d="M15 9a3 3 0 0 1 0 6M6 15l1 5h3l-1-4"/>',cart:'<path d="M3 9h18l-2 11H5z"/><path d="M8 9l3-5M16 9l-3-5"/>',bag:'<path d="M5 8h14l-1 13H6z"/><path d="M9 8a3 3 0 0 1 6 0"/>',archive:'<rect x="3" y="4" width="18" height="5" rx="1"/><path d="M5 9v11h14V9M10 13h4"/>',store:'<path d="M3 9l2-5h14l2 5v2H3zM5 11v9h14v-9"/>',bank:'<path d="M3 9l9-5 9 5zM5 11v7M10 11v7M14 11v7M19 11v7M3 21h18"/>',bld:'<rect x="5" y="3" width="14" height="18" rx="1"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/>',undo:'<path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',tag:'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/>',grid:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',brand:'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 14h8v5"/>',ruler:'<rect x="2" y="8" width="20" height="8" rx="1"/><path d="M6 8v4M10 8v3M14 8v4M18 8v3"/>',bundle:'<rect x="3" y="3" width="8" height="8" rx="1"/><rect x="13" y="13" width="8" height="8" rx="1"/><path d="M17 3v6M14 6h6M3 15h6M3 19h6"/>',price:'<path d="M12 3v18M16 7c-1-1.500-7-2-7 1.500S16 12 16 15.500 9.500 19 8 17"/>',qr:'<rect x="3" y="3" width="6" height="6"/><rect x="15" y="3" width="6" height="6"/><rect x="3" y="15" width="6" height="6"/><path d="M15 15h2v2h-2zM19 19h2M20 15v2"/>',doc:'<path d="M6 3h9l4 4v14H6z"/><path d="M9 12h7M9 16h7"/>',chev:'<path d="M6 9l6 6 6-6"/>',chart:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 17v-5M12 17V8M16 17v-3"/>',pencil:'<path d="M4 20l1-4L16 5l3 3L8 19zM14 7l3 3"/>',shop:'<path d="M3 9l1.500-5h15L21 9a3 3 0 0 1-6 0 3 3 0 0 1-6 0 3 3 0 0 1-6 0zM5 12v8h14v-8"/>',target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',plane:'<path d="M3 11l18-8-8 18-2-8z"/>',recin:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M12 8v6M9 11l3 3 3-3M7 17h10"/>',inv:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',revs:'<path d="M4 12a8 8 0 0 1 14-5l2 2M20 12a8 8 0 0 1-14 5l-2-2M20 4v5h-5M4 20v-5h5"/><path d="M12 8v8"/>',hist:'<path d="M4 12a8 8 0 1 0 3-6.200L4 8M4 3v5h5M12 8v4l3 2"/>',swap:'<path d="M4 8h14l-3-3M20 16H6l3 3"/>',clipb:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM12 17v-6M9 14l3-3 3 3"/>'};
+const ico=(k,c='')=>`<svg class="ic ${c}" viewBox="0 0 24 24">${IC[k]||IC.doc}</svg>`;
+const NAV=[['tasks','Tasks & Approvals','check'],['sales','Sales','receipt'],['mkt','Marketing','mega'],['purchases','Purchases','cart'],['products','Products','bag'],['inv','Inventory','archive'],['stores','Stores','store'],['acc','Accounting','bank'],['rep','Reports','chart']];
+const A=(l,f,t)=>[l,f,t];
+/* page: [key, title, columns, rows, add-label, row actions [label, from status, to status], icon] */
+const D=[
+['tasks-my','My Tasks','Task|Owner|Priority|Status','Review price list|Amina|High|Pending;Count aisle stock|Yusuf|Medium|In progress;Renew permits|Hodan|High|Pending','New task',[A('Complete','Pending','Done'),A('Complete','In progress','Done')],'doc'],
+['tasks-approvals','Pending Approvals','Request|Requested by|Amount|Status','Price change: Rice 25 kg|Amina|$1,200|Pending;Purchase order PO-1042|Yusuf|$8,450|Pending;Stock write-off|Hodan|$310|Approved','New request',[A('Approve','Pending','Approved'),A('Reject','Pending','Rejected')],'doc'],
+['sales-orders','Orders','Order|Customer|Total|Status','ORD-5521|Walk-in|$86.40|Paid;ORD-5522|Hotel Jazeera|$1,240.00|Pending;ORD-5523|Café Sahan|$312.50|Paid','New order',[A('Mark paid','Pending','Paid')],'doc'],
+['sales-customers','Customers','Name|Phone|City|Status','Hotel Jazeera|+252 61 555 0120|Mogadishu|Active;Café Sahan|+252 61 555 0133|Mogadishu|Active;Dalsan Catering|+252 61 555 0171|Afgooye|Inactive','New customer',[A('Deactivate','Active','Inactive'),A('Activate','Inactive','Active')],'doc'],
+['mkt-campaigns','Campaigns','Campaign|Channel|Budget|Status','Ramadan specials|SMS|$800|Live;Weekend fresh|Social|$450|Scheduled;Back to school|Print|$1,100|Draft','New campaign',[A('Schedule','Draft','Scheduled'),A('Go live','Scheduled','Live')],'doc'],
+['mkt-promotions','Promotions','Promotion|Discount|Channel|Status','Buy 2 get 1: Juice|33%|In store|Live;Rice 25 kg deal|12%|Online|Scheduled;Dairy week|20%|All stores|Ended','New promotion',[A('Go live','Scheduled','Live'),A('End','Live','Ended')],'doc'],
+['mkt-coupons','Coupons','Code|Value|Used|Status','WELCOME5|$5|142|Active;FRESH10|10%|88|Active;EID25|25%|300|Inactive','New coupon',[A('Deactivate','Active','Inactive'),A('Activate','Inactive','Active')],'doc'],
+['purchases-suppliers','Suppliers','Supplier|Contact|City|Status','Al-Noor Foods|+252 61 555 0101|Mogadishu|Active;Banadir Dairy|+252 61 555 0144|Afgooye|Active;Horn Fresh Produce|+252 61 555 0188|Merka|Inactive','Add supplier',[A('Deactivate','Active','Inactive'),A('Activate','Inactive','Active')],'bld'],
+['purchases-orders','Purchase Orders','PO|Supplier|Total|Status','PO-1042|Al-Noor Foods|$8,450|Pending;PO-1041|Banadir Dairy|$2,310|Approved;PO-1040|Horn Fresh Produce|$960|Received','New purchase order',[A('Approve','Pending','Approved'),A('Receive goods','Approved','Received')],'cart'],
+['purchases-returns','Purchase Returns','Return|Supplier|Items|Status','PR-210|Banadir Dairy|12|Pending;PR-209|Al-Noor Foods|4|Approved;PR-208|Horn Fresh Produce|30|Completed','New return',[A('Approve','Pending','Approved'),A('Complete','Approved','Completed')],'undo'],
+['products-all','All Products','Product|SKU|Price|Status','Basmati rice 25 kg|RC-025|$32.00|In stock;Fresh milk 1 L|DY-101|$1.40|Low;Sunflower oil 5 L|OL-505|$9.80|Out','Add product',[A('Restock','Low','In stock'),A('Restock','Out','In stock')],'bag'],
+['products-categories','Product Categories','Category|Products|Parent|Status','Dairy|48|Fresh food|Active;Grains and rice|36|Dry goods|Active;Household|120|None|Active','New category',[A('Deactivate','Active','Inactive'),A('Activate','Inactive','Active')],'grid'],
+['products-brands','Brands','Brand|Products|Origin|Status','Almarai|22|Saudi Arabia|Active;Banadir Dairy|9|Somalia|Active;Tilda|7|UK|Inactive','New brand',[A('Deactivate','Active','Inactive'),A('Activate','Inactive','Active')],'brand'],
+['products-units','Unit of Measurements','Unit|Symbol|Type|Status','Kilogram|kg|Weight|Active;Litre|L|Volume|Active;Piece|pc|Count|Active','New unit',[A('Deactivate','Active','Inactive'),A('Activate','Inactive','Active')],'ruler'],
+['products-bundles','Product Bundles','Bundle|Items|Price|Status','Breakfast pack|5|$14.50|Active;Ramadan basket|12|$48.00|Draft;Cleaning kit|6|$11.90|Active','New bundle',[A('Publish','Draft','Active'),A('Unpublish','Active','Draft')],'bundle'],
+['products-prices','Price Changes','Product|Old price|New price|Status','Basmati rice 25 kg|$32.00|$34.50|Pending;Fresh milk 1 L|$1.40|$1.50|Applied;Sunflower oil 5 L|$9.80|$10.40|Pending','New price change',[A('Apply','Pending','Applied')],'price'],
+['products-labels','Product Labels','Product|Barcode|Size|Status','Basmati rice 25 kg|6291003025|Shelf|Queued;Fresh milk 1 L|6291101001|Small|Printed;Sunflower oil 5 L|6291505005|Shelf|Queued','New label',[A('Print','Queued','Printed'),A('Reprint','Printed','Queued')],'qr'],
+['stores-all','All Stores','Store|City|Manager|Status','Main store|Mogadishu|Amina Warsame|Active;Hodan branch|Mogadishu|Yusuf Ali|Active;Bakara branch|Mogadishu|Hodan Nur|Inactive','Add store',[A('Close','Active','Inactive'),A('Reopen','Inactive','Active')],'store'],
+['stores-registers','Registers','Register|Store|Cashier|Status','POS-01|Main store|Ismail|Active;POS-02|Main store|Fartun|Active;POS-01|Hodan branch|Abdi|Inactive','Add register',[A('Disable','Active','Inactive'),A('Enable','Inactive','Active')],'doc'],
+['inv-overview','Inventory Overview','Item|Store|Quantity|Status','Fresh milk 1 L|Main store|14|Low;Basmati rice 25 kg|Main store|220|In stock;Sunflower oil 5 L|Hodan branch|0|Out','Add stock item',[A('Reorder','Low','Ordered'),A('Reorder','Out','Ordered')],'chart'],
+['inv-adjustments','Inventory Adjustments','Adjustment|Store|Reason|Status','ADJ-31|Main store|Damaged goods|Pending;ADJ-30|Hodan branch|Count correction|Approved;ADJ-29|Main store|Expired|Approved','New adjustment',[A('Approve','Pending','Approved')],'pencil'],
+['inv-internals','Internals','Internal|Department|Items|Status','INT-12|Bakery|18|Pending;INT-11|Butchery|9|Approved;INT-10|Cafeteria|22|Issued','New internal',[A('Approve','Pending','Approved'),A('Issue','Approved','Issued')],'shop'],
+['inv-requests','Requests','Request|Requested by|Items|Status','REQ-204|Hodan branch|40|Pending;REQ-203|Bakara branch|15|Approved;REQ-202|Main store|60|Rejected','New request',[A('Approve','Pending','Approved'),A('Reject','Pending','Rejected')],'target'],
+['inv-issues','Issues','Issue|Issued to|Items|Status','ISS-88|Bakery|12|Pending;ISS-87|Butchery|30|Issued;ISS-86|Cafeteria|7|Issued','New issue',[A('Confirm issue','Pending','Issued')],'plane'],
+['inv-receipts','Receipts','Receipt|From|Items|Status','RCP-501|Al-Noor Foods|120|Pending;RCP-500|Banadir Dairy|64|Received;RCP-499|Horn Fresh Produce|35|Received','New receipt',[A('Confirm receipt','Pending','Received')],'recin'],
+['acc-invoices','Invoices','Invoice|Customer|Amount|Status','INV-880|Hotel Jazeera|$1,240.00|Overdue;INV-881|Café Sahan|$312.50|Draft;INV-879|Dalsan Catering|$640.00|Paid','New invoice',[A('Mark paid','Overdue','Paid'),A('Send','Draft','Sent')],'inv'],
+['acc-sales-reversals','Sales Reversals','Reversal|Original order|Amount|Status','REV-12|ORD-5519|$45.00|Pending;REV-11|ORD-5510|$120.00|Approved;REV-10|ORD-5498|$18.50|Reversed','New sales reversal',[A('Approve','Pending','Approved'),A('Process','Approved','Reversed')],'revs'],
+['acc-purchase-reversals','Purchase Reversals','Reversal|Original PO|Amount|Status','PRV-08|PO-1039|$640.00|Pending;PRV-07|PO-1031|$1,100.00|Approved;PRV-06|PO-1025|$220.00|Reversed','New purchase reversal',[A('Approve','Pending','Approved'),A('Process','Approved','Reversed')],'hist'],
+['acc-transfer-reversals','Transfer Reversals','Reversal|Original transfer|Items|Status','TRV-05|TR-74|10|Pending;TRV-04|TR-70|24|Reversed;TRV-03|TR-66|6|Reversed','New transfer reversal',[A('Approve','Pending','Approved'),A('Process','Approved','Reversed')],'swap'],
+['acc-adjustment-reversals','Adjustment Reversals','Reversal|Original adjustment|Items|Status','ARV-04|ADJ-28|5|Pending;ARV-03|ADJ-25|12|Approved;ARV-02|ADJ-21|3|Reversed','New adjustment reversal',[A('Approve','Pending','Approved'),A('Process','Approved','Reversed')],'clipb'],
+['rep-sales','Sales Report','Report|Period|Format|Status','Daily sales summary|Today|PDF|Ready;Sales by store|October|CSV|Ready;Sales by cashier|This week|PDF|Ready','Generate report',[A('Download','Ready',null)],'chart'],
+['rep-performance','Sales Performance','Metric|Target|Actual|Status','Daily sales|$14,000|$15,200|Ahead;Basket size|$22|$19|Behind;Items per order|8|8|On track','Add target',[],'chart'],
+['rep-purchase','Purchase Report','Report|Period|Format|Status','Purchases by supplier|November|PDF|Ready;Open purchase orders|Today|CSV|Ready;Price variance|Q3|PDF|Ready','Generate report',[A('Download','Ready',null)],'chart'],
+['rep-mini','Mini Store Inventory','Item|Mini store|Quantity|Status','Bottled water 500 ml|Lobby kiosk|36|In stock;Snack bars|Lobby kiosk|5|Low;Phone chargers|Airport kiosk|0|Out','Add item',[A('Reorder','Low','Ordered'),A('Reorder','Out','Ordered')],'archive']
+];
+const TODAY=new Date();TODAY.setHours(0,0,0,0);const DAY=864e5,fd=ms=>new Date(ms).toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}),iso=ms=>{const d=new Date(ms);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let sd=20261123;const R=()=>{sd|=0;sd=sd+0x6D2B79F5|0;let t=Math.imul(sd^sd>>>15,1|sd);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296},RI=(a,b)=>Math.floor(R()*(b-a+1))+a;
+const COUNT={'tasks-my':160,'tasks-approvals':140,'sales-orders':2400,'acc-invoices':520,'purchases-orders':180,'purchases-returns':45,'products-prices':70,'inv-adjustments':90,'inv-internals':160,'inv-requests':170,'inv-issues':170,'inv-receipts':220,'acc-sales-reversals':70,'acc-purchase-reversals':30,'acc-transfer-reversals':30,'acc-adjustment-reversals':30,'acc-expenses':240};
+const PPL=['Amina','Yusuf','Hodan','Ismail','Fartun','Abdi','Sahra'],DEP=['Bakery','Butchery','Cafeteria','Deli','Produce'],SUP=['Al-Noor Foods','Banadir Dairy','Horn Fresh Produce','Kismayo Fisheries','Gulf Beverages','Shabelle Grains'];
+const EXTRA={Customer:['Walk-in','Hotel Jazeera','Café Sahan','Dalsan Catering','Bakara Restaurant','Sunrise Hotel','Hodan School Canteen','Peace Hospital'],Supplier:SUP,From:SUP,Owner:PPL,'Requested by':PPL,Store:['Main store','Hodan branch','Bakara branch'],Department:DEP,'Issued to':DEP,Priority:['High','Medium','Low'],Reason:['Damaged goods','Count correction','Expired','Spillage','Theft'],Expense:['Cold-room electricity','Delivery fuel','Shelf repairs','Staff transport','Packaging materials','Cleaning supplies','Security services','POS and internet fees'],Task:['Review price list','Count aisle stock','Renew permits','Check cold-chain logs','Update shelf labels','Audit supplier invoices','Train new cashiers','Reconcile cash drawer'],Request:['Price change request','Purchase order approval','Stock write-off','Supplier payment','Discount approval','Staff overtime'],Category:['Utilities','Transport','Maintenance','Supplies','Security'],Product:['Basmati rice 25 kg','Fresh milk 1 L','Sunflower oil 5 L','Sugar 10 kg','Wheat flour 50 kg','Tea 500 g','Bottled water 1.5 L']};
+const SPEC={},DATA={};let uid=1;
+D.forEach(d=>{const S=SPEC[d[0]]={t:d[1],c:d[2].split('|'),add:d[4],acts:d[5],g:NAV.find(n=>d[0].startsWith(n[0]+'-'))[1]},seed=d[3].split(';').map(r=>r.split('|')),n=COUNT[d[0]]||0,L=S.c.length-1,rows=[];
+  if(!n)seed.forEach(v=>rows.push({id:uid++,d:+TODAY-RI(5,720)*DAY,v}));
+  else{const F=new Set(S.acts.map(a=>a[1])),sts=[...new Set(seed.map(v=>v[L]))],T=[...new Set([...sts,...S.acts.map(a=>a[2])].filter(x=>x&&!F.has(x)))],NT=sts.filter(x=>F.has(x)),
+    pool=S.c.map((c,i)=>[...new Set([...seed.map(v=>v[i]),...(EXTRA[c]||[])])]),m=/^([A-Z]+)-(\d+)$/.exec(seed[0][0]),base=m?Math.max(100,+m[2]-n):0,pickT=()=>T.length?T[Math.floor(R()*R()*T.length)]:sts[RI(0,sts.length-1)];
+    Array.from({length:n},()=>RI(0,729)).sort((a,b)=>b-a).forEach((age,i)=>{
+      const v=S.c.map((c,ci)=>{
+        if(ci===L)return age>21||!NT.length?pickT():(R()<.45?NT[RI(0,NT.length-1)]:pickT());
+        if(ci===0&&m)return m[1]+'-'+(base+i);
+        const x=seed[0][ci];
+        if(/^[A-Z]+-\d+$/.test(x))return x.split('-')[0]+'-'+RI(1000,6000);
+        if(/^\$/.test(x)){const y=+x.replace(/[$,]/g,'')*(.25+R()*2.2);return'$'+(y>=100?fmt(Math.round(y)):y.toFixed(2))}
+        if(/^\d+$/.test(x))return String(RI(1,Math.max(20,+x*3)));
+        return pool[ci][RI(0,pool[ci].length-1)]});
+      rows.push({id:uid++,d:+TODAY-age*DAY,v})})}
+  DATA[d[0]]=rows.sort((a,b)=>b.d-a.d)});
+SPEC.dashboard={t:'Dashboard',g:'Business Portal'};
+const SEV=s=>/^(Active|Done|Approved|Paid|Received|Live|Applied|Ready|Printed|In stock|Completed|Sent|Ordered|Issued|Reversed|On track|Ahead)$/.test(s)?'ok':/^(Pending|Draft|Scheduled|In progress|Low|In transit|Queued|Behind)$/.test(s)?'warn':/^(Inactive|Rejected|Overdue|Out|Ended)$/.test(s)?'bad':'info';
+
+/* Alerts */
+let unread=0;const hist=[];
+function toast(sev,title,msg,go,ms=5200){
+  const t=document.createElement('div');t.className='glass toast';
+  t.innerHTML=`<span class="dot ${sev}"></span><div><h3>${esc(title)}</h3><p>${esc(msg)}</p>${go?`<button class="go">${go.label}</button>`:''}</div><button class="x" aria-label="Dismiss">✕</button><div class="bar ${sev}" style="animation-duration:${ms}ms"></div>`;
+  const close=()=>{t.classList.add('out');setTimeout(()=>t.remove(),300)};
+  t.querySelector('.x').onclick=close;if(go)t.querySelector('.go').onclick=()=>{location.hash=go.to;close()};
+  setTimeout(close,ms);$('#toasts').prepend(t);while($('#toasts').children.length>4)$('#toasts').lastChild.remove();
+  hist.unshift({sev,title,msg,at:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})});unread++;
+  const b=$('#badge');b.hidden=false;b.textContent=unread;b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump');drawN();
+}
+function drawN(){$('#nl').innerHTML=hist.length?hist.map(h=>`<div class="att" style="cursor:default"><span class="dot ${h.sev}"></span><div><b>${esc(h.title)}</b><small>${esc(h.msg)} · ${h.at}</small></div></div>`).join(''):'<p style="text-align:center;color:var(--muted);padding:40px 0">You’re all caught up. New alerts appear here.</p>'}
+$('#bell').onclick=()=>{$('#panel').classList.add('open');unread=0;$('#badge').hidden=true};$('#cp').onclick=()=>$('#panel').classList.remove('open');$('#clr').onclick=()=>{hist.length=0;drawN()};
+
+/* Modals */
+function modal(html){const s=document.createElement('div');s.className='scrim';s.innerHTML=`<div class="glass modal" role="dialog" aria-modal="true">${html}</div>`;
+  const close=()=>{s.remove();document.removeEventListener('keydown',esck)};const esck=e=>e.key==='Escape'&&close();document.addEventListener('keydown',esck);
+  s.onclick=e=>{if(e.target===s||e.target.closest('[data-x]'))close()};document.body.append(s);s.close=close;const f=s.querySelector('input,select,button.btn:not(.ghost)');f&&f.focus();return s}
+function confirmBox(title,msg,label,cb,danger=true){const m=modal(`<h2>${title}</h2><p>${msg}</p><div class="mf"><button class="btn ghost" data-x>Cancel</button><button class="btn ${danger?'danger':''}" id="ok">${label}</button></div>`);
+  m.querySelector('#ok').onclick=async()=>{m.close();cb()}}
+
+/* Sidebar */
+function buildNav(){$('#menu').innerHTML=`<a class="gh" href="#dashboard" data-k="dashboard">${ico('home')}<span>Dashboard</span></a>`+NAV.map(g=>`<div class="grp ${['purchases','products','inv','acc','rep'].includes(g[0])?'open':''}" data-g="${g[0]}"><button class="gh">${ico(g[2])}<span>${g[1]}</span>${ico('chev','chev')}</button><div class="sub"><div>${D.filter(d=>d[0].startsWith(g[0]+'-')).map(d=>`<a class="si" href="#${d[0]}" data-k="${d[0]}">${ico(d[6])}<span>${d[1]}</span></a>`).join('')}</div></div></div>`).join('')}
+$('#menu').onclick=e=>{const h=e.target.closest('button.gh');if(!h)return;const g=h.parentElement;if($('#app').classList.contains('collapsed')){$('#app').classList.remove('collapsed');g.classList.add('open')}else g.classList.toggle('open')};
+$('#col').onclick=()=>$('#app').classList.toggle('collapsed');
+$('#burger').onclick=()=>$('#app').classList.add('mo');
+$('#app').addEventListener('click',e=>{if($('#app').classList.contains('mo')&&!e.target.closest('aside')&&!e.target.closest('#burger'))$('#app').classList.remove('mo')});
+$('#brand').onclick=e=>{if(!e.target.closest('.col'))location.hash='dashboard'};
+$('#theme').onclick=()=>{const d=document.documentElement;d.dataset.theme=getComputedStyle(d).colorScheme==='dark'?'light':'dark'};
+$('#lo').onclick=()=>confirmBox('Log out?','You’ll need to sign in again to use the portal.','Log out',()=>{$('#so').classList.add('show');});
+$('#si').onclick=()=>{$('#so').classList.remove('show');toast('ok','Signed in','Welcome back to Barako Business Portal.')};
+
+/* Router */
+function route(){const k=location.hash.slice(1)||'dashboard',S=SPEC[k]||SPEC.dashboard,key=SPEC[k]?k:'dashboard';
+  document.querySelectorAll('[data-k]').forEach(a=>{const on=a.dataset.k===key;a.classList.toggle('on',on&&a.classList.contains('si')||on&&key==='dashboard')});
+  const p=document.querySelector(`.si[data-k="${key}"]`);if(p)p.closest('.grp').classList.add('open');
+  $('#crumb').textContent=S.g;$('#title').textContent=S.t;document.title=S.t+' · Barako Business Portal';$('#app').classList.remove('mo');scrollTo(0,0);
+  const v=$('#view');v.style.animation='none';void v.offsetWidth;v.style.animation='';key==='dashboard'?dash():page(key)}
+addEventListener('hashchange',route);
+
+/* Data pages (2 years of dated records, filters, pagination) */
+const FS={};
+function page(k){const S=SPEC[k],L=S.c.length-1,st=[...new Set(DATA[k].map(r=>r.v[L]))];Object.assign(FS,{q:'',from:'',to:'',st:'',pg:1,asc:false});
+  $('#view').innerHTML=`<div class="glass card"><div class="tools"><label class="search"><svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg><input id="q" placeholder="Search ${S.t.toLowerCase()}" aria-label="Search"></label>
+  <select id="fs" aria-label="Status"><option value="">All statuses</option>${st.map(x=>`<option>${esc(x)}</option>`).join('')}</select><label class="dt">From<input type="date" id="df"></label><label class="dt">To<input type="date" id="dt"></label><button class="btn" id="add">+ ${S.add}</button></div>
+  <div class="tw"><table><thead><tr><th>${S.c[0]}</th><th><button class="sortb" id="sd">Date ↓</button></th>${S.c.slice(1).map(c=>`<th>${c}</th>`).join('')}<th></th></tr></thead><tbody id="tb"></tbody></table></div><div class="pg" id="pg"></div></div>`;
+  const on=(id,key)=>$(id).oninput=e=>{FS[key]=e.target.value;FS.pg=1;rows(k)};on('#q','q');on('#fs','st');on('#df','from');on('#dt','to');
+  $('#sd').onclick=e=>{FS.asc=!FS.asc;e.target.textContent='Date '+(FS.asc?'↑':'↓');rows(k)};$('#add').onclick=()=>form(k);
+  $('#pg').onclick=e=>{const b=e.target.closest('[data-p]');if(b&&!b.disabled){FS.pg=+b.dataset.p;rows(k)}};
+  $('#tb').onclick=e=>{const b=e.target.closest('button');if(!b)return;const r=DATA[k].find(x=>x.id==b.closest('tr').dataset.id);
+    if(b.dataset.a==='edit')form(k,r);else if(b.dataset.a==='del')confirmBox('Delete '+esc(r.v[0])+'?','This removes it from '+S.t+'. You can’t undo this.','Delete',()=>del(k,r,b.closest('tr')));else act(k,r,S.acts[b.dataset.n])};
+  rows(k)}
+function rows(k,newId){const S=SPEC[k],L=S.c.length-1,q=FS.q.toLowerCase(),f=FS.from?+new Date(FS.from+'T00:00'):-1e15,t=FS.to?+new Date(FS.to+'T00:00'):1e15;
+  let list=DATA[k].filter(r=>(!FS.st||r.v[L]===FS.st)&&r.d>=f&&r.d<=t&&(!q||(r.v.join(' ')+' '+fd(r.d)).toLowerCase().includes(q)));if(FS.asc)list=list.slice().sort((a,b)=>a.d-b.d);
+  const per=15,pages=Math.max(1,Math.ceil(list.length/per));FS.pg=Math.min(FS.pg,pages);const sl=list.slice((FS.pg-1)*per,FS.pg*per);
+  $('#tb').innerHTML=sl.length?sl.map(r=>{const st=r.v[L];return`<tr data-id="${r.id}" class="${r.id===newId?'nw':''}"><td class="pri">${esc(r.v[0])}</td><td class="dtc">${fd(r.d)}</td>${r.v.slice(1,L).map(c=>`<td>${esc(c)}</td>`).join('')}<td><span class="chip ${SEV(st)}">${esc(st)}</span></td><td class="ra">${S.acts.map((a,i)=>a[1]===st?`<button class="mini pb" data-n="${i}">${a[0]}</button>`:'').join('')}<button class="mini" data-a="edit">Edit</button><button class="mini dng" data-a="del">Delete</button></td></tr>`}).join(''):`<tr><td colspan="12" class="empty">${list.length||DATA[k].length?'No matches. Try a different search or date range.':'Nothing here yet. Select “'+S.add+'” to create the first one.'}</td></tr>`;
+  const w=[];for(let p=Math.max(1,FS.pg-2);p<=Math.min(pages,FS.pg+2);p++)w.push(p);
+  $('#pg').innerHTML=`<span class="cnt">${list.length?`${fmt((FS.pg-1)*per+1)}–${fmt(Math.min(list.length,FS.pg*per))} of ${fmt(list.length)}`:'0'} ${S.t.toLowerCase()}</span><span class="pgb"><button data-p="1" ${FS.pg<2?'disabled':''} aria-label="First page">«</button><button data-p="${FS.pg-1}" ${FS.pg<2?'disabled':''} aria-label="Previous page">‹</button>${w.map(p=>`<button data-p="${p}" class="${p===FS.pg?'on':''}">${p}</button>`).join('')}<button data-p="${FS.pg+1}" ${FS.pg>=pages?'disabled':''} aria-label="Next page">›</button><button data-p="${pages}" ${FS.pg>=pages?'disabled':''} aria-label="Last page">»</button></span>`}
+async function act(k,r,a){try{await wait();if(a[2]){r.v[r.v.length-1]=a[2];rows(k);toast(SEV(a[2]),r.v[0]+' is now '+a[2].toLowerCase(),a[0]+' completed.')}else toast('info','Download started',r.v[0]+' is being prepared.')}catch(e){toast('bad','Couldn’t '+a[0].toLowerCase(),e.message+'. Try again.')}}
+async function del(k,r,tr){try{await wait();tr.classList.add('rm');setTimeout(()=>{DATA[k]=DATA[k].filter(x=>x!==r);rows(k)},380);toast('warn',r.v[0]+' deleted','Removed from '+SPEC[k].t+'.')}catch(e){toast('bad','Couldn’t delete',e.message+'. Try again.')}}
+function form(k,r){const S=SPEC[k],last=S.c.length-1,sts=[...new Set([...DATA[k].map(x=>x.v[last]),'Active','Pending'])];
+  const m=modal(`<h2>${r?'Edit '+esc(r.v[0]):S.add}</h2><div class="fields">${S.c.map((c,i)=>`<label>${c}${i===last?`<select name="f${i}">${sts.map(x=>`<option ${r&&r.v[i]===x?'selected':''}>${x}</option>`).join('')}</select>`:`<input name="f${i}" value="${r?esc(r.v[i]):''}" placeholder="${c}" autocomplete="off">`}</label>${i===0?`<label>Date<input type="date" name="date" value="${iso(r?r.d:TODAY)}"></label>`:''}`).join('')}</div><div class="mf"><button class="btn ghost" data-x>Cancel</button><button class="btn" id="save">Save</button></div>`);
+  m.querySelector('#save').onclick=async e=>{const f=[...m.querySelectorAll('[name^="f"]')],first=f[0],dv=m.querySelector('[name=date]').value;first.parentElement.classList.toggle('err',!first.value.trim());if(!first.value.trim()){first.focus();return}
+    const b=e.target;b.disabled=true;b.textContent='Saving…';
+    try{await wait();const v=f.map(x=>x.value.trim()||'-'),d=dv?+new Date(dv+'T00:00'):+TODAY;let id;if(r){r.v=v;r.d=d;id=r.id}else{id=uid++;DATA[k].unshift({id,d,v})}DATA[k].sort((a,b)=>b.d-a.d);m.close();rows(k,id);toast('ok',v[0]+' saved',r?'Changes saved.':'Added to '+S.t+'.')}
+    catch(er){b.disabled=false;b.textContent='Save';toast('bad','Couldn’t save',er.message+'. Try again.')}}}
+
+/* Dashboard (built from the 2 years of orders and purchase orders) */
+let range=24;const amt=v=>+String(v).replace(/[$,]/g,'')||0,$f=n=>'$'+fmt(n);
+function monthly(key,col,n){const out=Array.from({length:n},(_,i)=>({d:new Date(TODAY.getFullYear(),TODAY.getMonth()-(n-1-i),1),t:0}));
+  DATA[key].forEach(r=>{const dt=new Date(r.d),i=(TODAY.getFullYear()-dt.getFullYear())*12+TODAY.getMonth()-dt.getMonth();if(i>=0&&i<n)out[n-1-i].t+=amt(r.v[col])});return out}
+function dash(){
+  $('#view').innerHTML=`<section class="kpis" id="kp">${'<div class="glass kpi"><div class="skel"></div><div class="skel" style="height:1rem;width:35%"></div></div>'.repeat(4)}</section>
+  <section class="row"><div class="glass card"><div class="head"><h2>Sales and purchases</h2><div class="seg" id="rg"><button data-r="6">6 months</button><button data-r="12">12 months</button><button data-r="24">2 years</button></div></div><div class="lg"><span><i class="dot info"></i>Sales</span><span><i class="dot ok"></i>Purchases</span></div><div style="position:relative"><svg id="chart" viewBox="0 0 700 280" preserveAspectRatio="none"></svg><div class="tip" id="tip"></div></div></div>
+  <div class="glass card"><div class="head"><h2>Needs attention</h2></div><div id="att"></div></div></section>`;
+  $('#rg').onclick=e=>{const b=e.target.closest('button');if(b){range=+b.dataset.r;mark();chart()}};mark();
+  wait().then(()=>{const sm=monthly('sales-orders',2,24),sum=(a,i,j)=>a.slice(i,j).reduce((x,y)=>x+y.t,0),s12=sum(sm,12,24),pct=(s12-sum(sm,0,12))/sum(sm,0,12)*100,
+    pend=['tasks-approvals','purchases-orders','acc-expenses','inv-requests','inv-adjustments'].reduce((n,k)=>n+DATA[k].filter(r=>r.v[r.v.length-1]==='Pending').length,0),low=DATA['inv-overview'].filter(r=>/^(Low|Out)$/.test(r.v[r.v.length-1])).length,
+    K=[['Sales this month',Math.round(sm[23].t),$f,'Month to date','info'],['Sales, last 12 months',Math.round(s12),$f,(pct>=0?'▲ ':'▼ ')+Math.abs(pct).toFixed(1)+'% vs the 12 months before',pct>=0?'up':'dn'],['Low or out of stock',low,fmt,'Check inventory','warn'],['Pending approvals',pend,fmt,'Waiting on you','warn']];
+    $('#kp').innerHTML=K.map(k=>`<div class="glass kpi hov"><div class="l">${k[0]}</div><div class="num">0</div><div class="dl ${k[4]}">${k[3]}</div></div>`).join('');
+    document.querySelectorAll('.num').forEach((n,i)=>{const s=performance.now();(function st(t){const p=Math.min(1,(t-s)/900);n.textContent=K[i][2](Math.round(K[i][1]*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(st)})(s)});
+    const items=D.map(d=>[d,DATA[d[0]].filter(r=>/^(Pending|Low|Out|Overdue)$/.test(r.v[r.v.length-1])).length]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]);
+    $('#att').innerHTML=items.slice(0,7).map(([d,n])=>`<button class="att" data-to="${d[0]}"><span class="dot warn"></span><div><b>${d[1]}</b><small>${n} item${n>1?'s':''} need action</small></div></button>`).join('')||'<p style="color:var(--muted)">Nothing needs attention right now.</p>';
+    $('#att').onclick=e=>{const b=e.target.closest('[data-to]');if(b)location.hash=b.dataset.to};
+    if(!dash.alerted){dash.alerted=1;if(pend)toast('warn',pend+' approvals are waiting','Requests and orders are blocked until reviewed.',{label:'Review now',to:'tasks-approvals'});if(low)setTimeout(()=>toast('bad',low+' products are low or out of stock','Reorder before the evening rush.',{label:'View stock',to:'inv-overview'}),900)}
+  }).catch(e=>toast('bad','Couldn’t load metrics',e.message+'. Reopen the dashboard to retry.'));chart()}
+function mark(){document.querySelectorAll('#rg button').forEach(b=>b.classList.toggle('on',+b.dataset.r===range))}
+async function chart(){const c=$('#chart');if(!c)return;c.style.opacity=.3;try{await wait()}catch(e){toast('bad','Chart didn’t load',e.message+'. Choose a range to retry.')}
+  if(!$('#chart'))return;c.style.opacity=1;const n=range,A1=monthly('sales-orders',2,n),A2=monthly('purchases-orders',2,n),W=700,H=280,p=18,mx=Math.max(...A1.map(x=>x.t),...A2.map(x=>x.t))*1.08;
+  const pts=a=>a.map((x,i)=>[p+i*(W-2*p)/(n-1),H-p-x.t/mx*(H-2*p)]),P=pts(A1),Q=pts(A2),sm=a=>a.map((q,i)=>{if(!i)return`M${q[0]} ${q[1]}`;const r=a[i-1],cx=(r[0]+q[0])/2;return`C${cx} ${r[1]} ${cx} ${q[1]} ${q[0]} ${q[1]}`}).join(' ');
+  c.innerHTML=`<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--blue)" stop-opacity=".4"/><stop offset="1" stop-color="var(--blue)" stop-opacity="0"/></linearGradient><filter id="gl"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>${[0,1,2,3].map(i=>`<line x1="0" x2="${W}" y1="${p+i*(H-2*p)/3}" y2="${p+i*(H-2*p)/3}" stroke="var(--stroke)" stroke-dasharray="3 6"/>`).join('')}<path d="${sm(P)} L${P[n-1][0]} ${H} L${P[0][0]} ${H}Z" fill="url(#g)"/><path d="${sm(Q)}" fill="none" stroke="var(--ok)" stroke-width="2" stroke-dasharray="5 6" vector-effect="non-scaling-stroke"/><path id="ln" d="${sm(P)}" fill="none" stroke="var(--blue)" stroke-width="3" filter="url(#gl)" stroke-linecap="round" vector-effect="non-scaling-stroke"/><line id="cx" y1="0" y2="${H}" stroke="var(--blue)" opacity="0"/><circle id="cd" r="6" fill="var(--blue)" stroke="#fff" stroke-width="2" opacity="0" filter="url(#gl)"/>`;
+  const ln=$('#ln'),L=ln.getTotalLength();ln.style.strokeDasharray=L;ln.animate([{strokeDashoffset:L},{strokeDashoffset:0}],{duration:1000,easing:'cubic-bezier(.3,.7,.2,1)'});
+  const tip=$('#tip'),mv=e=>{const r=c.getBoundingClientRect(),x=((e.touches?e.touches[0].clientX:e.clientX)-r.left)/r.width*W;let i=Math.max(0,Math.min(n-1,Math.round((x-p)/((W-2*p)/(n-1)))));
+    $('#cx').setAttribute('x1',P[i][0]);$('#cx').setAttribute('x2',P[i][0]);$('#cx').setAttribute('opacity',.35);$('#cd').setAttribute('cx',P[i][0]);$('#cd').setAttribute('cy',P[i][1]);$('#cd').setAttribute('opacity',1);
+    tip.innerHTML=`<b>${A1[i].d.toLocaleDateString('en-US',{month:'long',year:'numeric'})}${i===n-1?' (to date)':''}</b><br>Sales ${$f(Math.round(A1[i].t))}<br>Purchases ${$f(Math.round(A2[i].t))}`;tip.style.opacity=1;tip.style.left=Math.min(r.width-170,Math.max(0,P[i][0]/W*r.width-60))+'px';tip.style.top=Math.max(0,P[i][1]/H*r.height-84)+'px'};
+  c.onmousemove=mv;c.ontouchmove=mv;c.onmouseleave=()=>{tip.style.opacity=0;$('#cd').setAttribute('opacity',0);$('#cx').setAttribute('opacity',0)}}
+
+$('#today').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+buildNav();drawN();route();
+</script>
+</body>
+</html>
